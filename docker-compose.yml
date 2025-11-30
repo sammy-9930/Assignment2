@@ -52,6 +52,8 @@ services:
       context: ./src
       dockerfile: order_service/Dockerfile
     container_name: order_service
+    env_file:
+    - .env
     ports:
       - "8002:8000"
     depends_on:
@@ -70,6 +72,8 @@ services:
       context: ./src
       dockerfile: user_service_v2/Dockerfile
     container_name: user_service_v2
+    env_file:
+    - .env
     ports:
       - "8003:8000"
     depends_on:
@@ -88,6 +92,8 @@ services:
       context: ./src
       dockerfile: api_gateway/Dockerfile
     container_name: api_gateway
+    env_file:
+    - .env
     ports:
       - "8000:8080"
     volumes:
