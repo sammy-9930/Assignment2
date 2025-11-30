@@ -29,6 +29,6 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ubuntu/app
-            docker compose down -v
-            docker compose up -d --build
+            docker-compose down -v
+            docker-compose up -d --build
             docker system prune -f
