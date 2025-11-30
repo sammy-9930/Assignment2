@@ -13,8 +13,8 @@ logging.basicConfig(
 logger = logging.getLogger("order_service")
 
 class Config:
-    MONGO_URI = os.getenv("ORDER_MONGO_URI")
-    DB_NAME= os.getenv("ORDER_DB")
+    MONGO_URI = os.getenv("MONGO_URI")
+    ORDER_DB= os.getenv("ORDER_DB")
     RABBITMQ_QUEUE_NAME = os.getenv("RABBITMQ_QUEUE_NAME")
     RABBITMQ_URI = os.getenv("RABBITMQ_URI")
     RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME")

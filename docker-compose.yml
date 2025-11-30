@@ -1,22 +1,18 @@
 
 services:
-  mongo-user:
+  mongodb:
     image: mongo:latest
-    container_name: mongo-user
-    hostname: mongo-user
+    container_name: mongodb
     ports:
-      - "27017:27017"
+    - "27017:27017"
+    command: ["mongod", "--wiredTigerCacheSizeGB=0.25"]
     volumes:
-      - mongo_user_data:/data/db
-
-  mongo-order:
-    image: mongo:latest
-    container_name: mongo-order
-    hostname: mongo-order
-    ports:
-      - "27018:27017"
-    volumes:
-      - mongo_order_data:/data/db
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -24,6 +20,11 @@ services:
     ports:
       - "5672:5672"   # RabbitMQ connection
       - "15672:15672" # Web dashboard
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
@@ -36,11 +37,11 @@ services:
     ports:
       - "8001:8000"
     depends_on:
-      - mongo-user
+      - mongodb
       - rabbitmq
     environment:
-      - USER_SERVICE_MONGO_URI=${USER_SERVICE_MONGO_URI}
-      - USER_SERVICE_DB=${USER_SERVICE_DB}
+      - MONGO_URI=${MONGO_URI}
+      - USER_DB=${USER_DB}
       - RABBITMQ_URI=${RABBITMQ_URI}
       - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
@@ -54,10 +55,10 @@ services:
     ports:
       - "8002:8000"
     depends_on:
-      - mongo-order
+      - mongodb
       - rabbitmq
     environment:
-      - ORDER_MONGO_URI=${ORDER_MONGO_URI}
+      - MONGO_URI=${MONGO_URI}
       - ORDER_DB=${ORDER_DB}
       - RABBITMQ_URI=${RABBITMQ_URI}
       - RABBITMQ_QUEUE_NAME=${RABBITMQ_QUEUE_NAME}
@@ -72,11 +73,11 @@ services:
     ports:
       - "8003:8000"
     depends_on:
-      - mongo-user
+      - mongodb
       - rabbitmq
     environment:
-      - USER_SERVICE_MONGO_URI=${USER_SERVICE_MONGO_URI}
-      - USER_SERVICE_DB=${USER_SERVICE_DB}
+      - MONGO_URI=${MONGO_URI}
+      - USER_DB=${USER_DB}
       - RABBITMQ_URI=${RABBITMQ_URI}
       - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
       - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
@@ -98,6 +99,4 @@ services:
 
 
 volumes:
-  mongo_user_data:
-  mongo_order_data:
-
+  mongodb_data:

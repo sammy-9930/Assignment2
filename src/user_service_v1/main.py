@@ -5,8 +5,8 @@ from user_service_v1.app.config import Config
 
 app = FastAPI(title="User Service V1")
 
-client = MongoClient(Config.USER_SERVICE_MONGO_URI)
-db = client[Config.USER_SERVICE_DB]
+client = MongoClient(Config.MONGO_URI)
+db = client[Config.USER_DB]
 app.users_collection = db["users"]
 
 app.include_router(router, prefix="/users", tags=["users"])
