@@ -9,7 +9,7 @@ app = FastAPI(title="Order Service")
 
 # === MongoDB setup ===
 client = MongoClient(Config.MONGO_URI)
-db = client[Config.DB_NAME]
+db = client[Config.ORDER_DB]
 app.orders_collection = db["orders"]
 
 

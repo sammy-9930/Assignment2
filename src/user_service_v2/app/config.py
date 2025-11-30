@@ -9,8 +9,8 @@ logging.basicConfig(
 logger = logging.getLogger("user_service_v2")
 
 class Config:
-    USER_SERVICE_MONGO_URI = os.getenv("USER_SERVICE_MONGO_URI")
-    USER_SERVICE_DB = os.getenv("USER_SERVICE_DB")
+    MONGO_URI=os.getenv("MONGO_URI")
+    USER_DB=os.getenv("USER_DB")
     RABBITMQ_URI = os.getenv("RABBITMQ_URI")
     RABBITMQ_USERNAME = os.getenv("RABBITMQ_USERNAME")
     RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD")
